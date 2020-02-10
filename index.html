@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Get Current Weather and Forecast">
+  <meta name="author" content="THS chohort (G) 2019">
+
+  <title>Weather App</title>
+
+  <link rel="icon" href="favicon.png">
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="css/scrolling-nav.css" rel="stylesheet">
+
+</head>
+<script>
+
+function hello(country){
+
+  
+
+    var text;
+    if(country.innerHTML=="INDIA"){
+      text="<li class='pl-2'><a href='#' onclick='city(this)'>DELHI</a></li><hr/>"+
+  "<li class='pl-2'><a href='#' onclick='city(this)'>HYDERABAD</a></li><hr/>"+
+  "<li class='pl-2'><a href='#' onclick='city(this)'>BENGALURU</a></li>";
+    }else{
+      text="<li class='pl-2'><a href='#' onclick='city(this)'>JEDDAH</a></li><hr/>"+
+  "<li class='pl-2'><a href='#' onclick='city(this)'>RIYADH</a></li><hr/>"+
+  "<li class='pl-2'><a href='#' onclick='city(this)'>ABHA</a></li>";
+    }
+    document.getElementById("city").innerHTML=text;
+    
+  }
+</script>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">Weather App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#about">Current Weather</a>
+            
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#services">Forecast</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-primary text-white">
+    <div class="container text-center">
+      <h1>Welcome to The Weather App</h1>
+      <p class="lead">Please Select Your City:</p>
+
+
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">COUNTRY
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+              <li style="cursor: pointer;" class="pl-2"><a  onclick="hello(this)">INDIA</a></li>
+              <hr />
+              <li style="cursor: pointer;" class="pl-2"><a  onclick="hello(this)">SAUDI</a></li>
+
+          </ul>
+        </div>
+        <br>
+        <div class="dropdown ">
+            <button class=" btn btn-light dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">CITY
+            <span class="caret"></span></button>
+            <ul id="city" class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                <li  > Select a Country</li>
+                
+  
+            </ul>
+          </div>
+
+        
+    </div>
+  </header>
+
+  <section id="about">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="display-3">Current Weather</h2>
+          <hr/>
+          <div class="row">
+            <div calss="column">
+                <img width="250px"src="" id="icon" />
+            </div>
+            <div calss="column" style="padding-top: 30px;">
+                <div  class="pl-3" style="font-size:60px" id="temp"></div>
+                <div class="pl-3" style="font-size:60px" id="weather"></div>
+
+            </div>
+               
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="bg-light">
+    <div class="container" style="text-align:left; margin-left: 0px;">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h2 class="display-3">Forecast</h2>
+          <div >
+              <canvas style="text-align:left" id="myChart"></canvas>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Thank You For Using Weather App</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom JavaScript for this theme -->
+  <script src="js/scrolling-nav.js"></script>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" type="text/JavaScript"></script>
+<script>
+  var city=(element)=>{
+    document.getElementById("temp").innerHTML=" ";
+    document.getElementById("icon").src="https://media.giphy.com/media/NzMn60baeGIOA/giphy.gif";
+    const key= "fd4786f2c75440289af619c9bfb869e4";
+    var cityName=element.innerHTML;
+    var url= `https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&key=${key}`;
+
+    var weather;
+    var temp; 
+    var arr= [];
+    var arrIcon=[];
+    var iconURL;
+    console.log(cityName);
+
+  axios.get(url)
+  .then(function (response) {
+    // handle success
+    weather= response.data.data[0].weather.description;
+    var iconCode= response.data.data[0].weather.icon;
+    iconURL = `https://www.weatherbit.io/static/img/icons/${iconCode}.png`
+
+    temp=response.data.data[0].temp;
+    func(temp,iconURL,weather);
+    for(var i=0; i<response.data.data.length;i++){
+        arr.push(response.data.data[i].temp);
+    } 
+    for(var i=0; i<response.data.data.length;i++){
+        arrIcon.push(response.data.data[i].weather.icon);
+    } 
+    chart(arr, arrIcon);
+
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    }
+  );
+
+  var func=(temp,url,weather)=>{
+    document.getElementById("temp").innerHTML=temp+"°";
+    document.getElementById("icon").src=url;
+    document.getElementById("weather").innerHTML=weather;
+  }
+
+  }
+  
+</script>
+<script>
+    //Plotting the data
+    function chart(temperature, icons){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        ctx.canvas.width = 1200;         //setting canvas height
+        ctx.canvas.height = 400;
+        var images = []  //Create an empty array for image objects
+        for(i in icons){
+            images.push(null)
+        }
+        
+        for(i in images){                    
+            images[i] = new Image()         //creating image objects
+            images[i].src = `https://www.weatherbit.io/static/img/icons/${icons[i]}.png`   //providing image src
+            images[i].height = "70"
+            images[i].width = "70"
+        }
+        date = new Date()  //making date labels for the chart
+        var dates = date.getDate()
+        temp_labels = []
+        for(i in temperature){
+            temp_labels.push(dates)
+            dates++
+        }
+        
+        console.log(temperature);           //checking if temperature array is available
+        console.log(icons);         //checking if icons array is available
+        console.log(images);        //checking if images array is available
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+            // The data for our dataset
+            data: {
+                labels: temp_labels,
+                datasets: [{
+                    label: 'Forecast',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointStyle: images,
+                    data: temperature,
+                }]
+            },
+            // Configuration options go here
+            options: {responsive: false,
+                    maintainAspectRatio: true,
+                legend : {
+                    display: false,
+            },
+            scales: {
+                xAxes: [{
+                    gridLines: {
+                        display:false
+            },
+                    ticks: {
+                        beginAtZero: false,
+            }
+             }],
+                yAxes: [{
+                    gridLines: {
+                        display:false
+                    },   
+             }]
+              }
+            },
+            
+        });
+}
+    </script>
+
+</html>
